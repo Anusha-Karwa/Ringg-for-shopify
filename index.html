@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ringg AI Shopping Assistant – Marketly App Store</title>
+<meta name="description" content="Guide shoppers to the right product and close more sales with AI voice and chat conversations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1a1a; --ink-2:#303030; --muted:#616161; --line:#e3e3e3; --soft:#f4f4f4;
+  --bg:#ffffff; --peach-1:#fff6f1; --peach-2:#ffd9c4; --peach-3:#f8a77f; --accent:#ff6a2b;
+  --green:#36e27a; --star:#1a1a1a; --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{max-width:1290px;margin:0 auto;padding:0 40px}
+
+/* ---------- Header ---------- */
+header.top{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:17px;white-space:nowrap}
+.brand svg{flex:none}
+.search{flex:1;max-width:520px;display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fafafa;border-radius:999px;padding:0 18px;height:50px;transition:.15s}
+.search:focus-within{border-color:#999;background:#fff;box-shadow:0 0 0 3px #0000000d}
+.search input{border:0;outline:0;background:transparent;font:inherit;font-size:16px;width:100%;color:var(--ink)}
+.search input::placeholder{color:#7a7a7a}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:26px}
+.browse{position:relative}
+.browse>button{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:500}
+.browse .menu{position:absolute;top:44px;right:-20px;width:520px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px #0000001f;padding:22px;display:none;grid-template-columns:1fr 1fr;gap:6px 24px}
+.browse.open .menu{display:grid}
+.browse .menu h5{grid-column:1/-1;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:4px 0 6px}
+.browse .menu a{text-decoration:none;padding:8px 10px;border-radius:8px;font-size:14px}
+.browse .menu a:hover{background:var(--soft)}
+.login{font-size:16px;font-weight:500;text-decoration:none}
+.btn-dark{background:var(--ink);color:#fff;border-radius:999px;padding:14px 24px;font-weight:600;font-size:16px;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;transition:.15s}
+.btn-dark:hover{background:#000;transform:translateY(-1px)}
+
+/* ---------- Layout ---------- */
+.listing{display:grid;grid-template-columns:270px 1fr;gap:60px;padding-top:44px}
+aside.side{position:sticky;top:110px;align-self:start}
+.app-id{display:flex;gap:14px;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.app-icon{width:56px;height:56px;border-radius:12px;background:#151515;display:grid;place-items:center;flex:none;box-shadow:0 1px 2px #0003}
+.app-id h1{font-size:20px;line-height:1.25;font-weight:600}
+.meta{padding:22px 0 6px}
+.meta dt{font-size:13px;font-weight:600;margin-bottom:2px}
+.meta dd{color:var(--muted);margin-bottom:18px;font-size:15px}
+.meta dd a{color:var(--ink)}
+.side .btn-dark{width:100%;padding:17px}
+.demo-link{display:block;text-align:center;margin-top:18px;font-weight:500;text-underline-offset:3px}
+
+/* ---------- Media ---------- */
+.media{display:grid;grid-template-columns:1fr 190px;gap:16px}
+.video{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:#111;cursor:pointer}
+.video iframe,.video video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.poster{position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,#ffffff00 0 26px,#ffffff22 26px 28px),
+  linear-gradient(180deg,#fdfdfd 0%,#fbe9df 45%,#f6b896 80%,#f19a6f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:56px}
+.poster .bar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:12px;padding:14px 18px;background:linear-gradient(#0000008c,#0000)}
+.poster .bar .mini{width:38px;height:38px;border-radius:50%;background:#151515;display:grid;place-items:center;flex:none}
+.poster .bar b{color:#fff;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;text-align:left}
+.poster .bar small{color:#ffffffc9;font-size:12px;display:block;text-align:left}
+.wordmark{display:flex;align-items:center;gap:8px;font-weight:800;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin-top:40px}
+.live{color:var(--accent);font-size:13px;font-weight:600;margin:6px 0 10px}
+.headline-chip{font-size:clamp(18px,2.4vw,28px);font-weight:800;letter-spacing:-.01em}
+.headline-chip span{background:linear-gradient(90deg,#ff6a2b,#e2366b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.play{width:68px;height:48px;border-radius:12px;background:#e62117;display:grid;place-items:center;margin:14px 0;box-shadow:0 6px 20px #e621174d;transition:.15s}
+.video:hover .play{transform:scale(1.07)}
+.pillars{display:flex;gap:18px;color:#555;font-size:13px;font-weight:500}
+.pillars i{font-style:normal;color:#aaa}
+.watch{position:absolute;right:28px;bottom:22px;background:#00000070;color:#fff;border-radius:999px;padding:11px 26px;font-size:18px;font-weight:500;display:flex;align-items:center;gap:8px;backdrop-filter:blur(4px)}
+.linkbtn{position:absolute;left:28px;bottom:22px;width:46px;height:46px;border-radius:50%;background:#00000050;display:grid;place-items:center}
+.soon{position:absolute;top:70px;right:18px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:600;border-radius:999px;padding:4px 10px;color:var(--muted)}
+.thumbs{display:flex;flex-direction:column;gap:12px}
+.thumb{flex:1;border-radius:8px;overflow:hidden;border:1px solid var(--line);cursor:pointer;transition:.15s;background:#fff;padding:0;position:relative;min-height:0}
+.thumb:hover{box-shadow:0 6px 18px #00000017;transform:translateY(-1px)}
+.shot{width:100%;height:100%;display:block}
+
+/* ---------- Copy ---------- */
+.lead{font-size:19px;font-weight:700;line-height:1.45;margin:34px 0 18px}
+.desc{color:var(--ink-2);font-size:16px;line-height:1.65}
+.bullets{margin:22px 0 0 20px;color:var(--ink-2);font-size:16px;line-height:1.95}
+.details{margin-top:40px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:160px 1fr auto;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);align-items:start}
+.row:last-child{border-bottom:0}
+.row>b{font-size:13px;font-weight:600;padding-top:3px}
+.row .val{font-size:16px}
+.row .val a{text-underline-offset:3px}
+.pill{font-size:12px;font-weight:500;background:var(--soft);border-radius:999px;padding:5px 12px;white-space:nowrap}
+.pill:hover{background:#e9e9e9}
+.features{display:none;margin-top:16px}
+.features.show{display:block}
+.features p{color:var(--muted);margin:14px 0 4px}
+.features a{text-underline-offset:3px;line-height:1.8}
+
+/* ---------- Sections ---------- */
+section.block{padding-top:70px;padding-bottom:10px}
+section.block h2{font-size:24px;font-weight:700;margin-bottom:8px}
+.sub{color:var(--muted);margin-bottom:26px}
+.pricing-bg{background:#f7f7f7;margin-top:80px;padding:60px 0 50px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.plan{background:#fff;border-radius:var(--radius);padding:24px 22px 30px;box-shadow:0 0 0 1px #0000000f,0 2px 6px #0000000d;position:relative}
+.plan.pop{box-shadow:0 0 0 2px var(--ink),0 8px 24px #00000014}
+.plan .tag{position:absolute;top:-12px;right:18px;background:var(--ink);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px}
+.plan small{color:var(--muted);font-size:14px}
+.plan .price{font-size:26px;font-weight:700;margin:2px 0 22px}
+.plan .price span{font-size:14px;font-weight:400;color:var(--muted)}
+.plan h4{font-size:14px;font-weight:600;margin-bottom:8px}
+.plan ul{list-style:none;font-size:13.5px;color:var(--ink-2)}
+.plan li{display:flex;gap:8px;padding:3px 0}
+.plan li:before{content:"✓";font-weight:700}
+.plan .extra{margin-top:12px;color:var(--muted);font-size:12.5px}
+.billing{color:var(--muted);font-size:14px;margin-top:30px}
+
+.reviews{display:grid;grid-template-columns:270px 1fr;gap:60px}
+.overall h3{font-size:16px;font-weight:600;margin:6px 0 4px}
+.score{display:flex;align-items:center;gap:10px;font-size:38px;font-weight:700}
+.stars{display:flex;gap:2px}
+.dist{margin:18px 0 22px}
+.dist div{display:grid;grid-template-columns:28px 1fr 20px;align-items:center;gap:10px;font-size:14px;margin:8px 0}
+.dist .track{height:6px;border-radius:9px;background:#ececec}
+.r-actions{display:flex;gap:8px}
+.ghost{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:500;background:#fff}
+.ghost:hover{background:var(--soft)}
+.empty{border:1px dashed #d4d4d4;border-radius:var(--radius);padding:40px;text-align:center;color:var(--muted);align-self:start}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:6px}
+
+.support{display:grid;grid-template-columns:270px 1fr;gap:60px}
+.support .row{grid-template-columns:160px 1fr}
+.perm b{display:block;font-size:14px;font-weight:600;margin-top:4px}
+.perm span{display:block;color:var(--ink-2);margin-bottom:14px}
+
+.similar{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+.app-card{display:flex;gap:14px;text-decoration:none;padding:10px;margin:-10px;border-radius:12px}
+.app-card:hover{background:#fafafa}
+.app-card .ico{width:56px;height:56px;border-radius:12px;flex:none;display:grid;place-items:center;border:1px solid var(--line)}
+.app-card h4{font-size:15px;font-weight:600}
+.app-card .r{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.app-card p{font-size:13px;color:var(--muted);margin-top:2px}
+.badge{display:inline-flex;gap:5px;align-items:center;background:#e9f4ff;color:#0a4a8a;font-size:11.5px;font-weight:500;border-radius:6px;padding:3px 8px;margin-top:8px}
+
+/* ---------- CTA + Footer ---------- */
+.cta{background:#000;color:#fff;margin-top:100px;padding:80px 0 0}
+.cta h2{text-align:center;font-size:clamp(34px,5vw,58px);font-weight:700;letter-spacing:-.02em}
+.cta .center{text-align:center;margin-top:28px}
+.btn-green{background:var(--green);color:#000;font-weight:600;border-radius:999px;padding:15px 26px;display:inline-block;text-decoration:none;font-size:16px;transition:.15s}
+.btn-green:hover{background:#5bf095}
+footer .cols{display:grid;grid-template-columns:1.2fr repeat(4,1fr);gap:30px;padding:100px 0 70px}
+footer h6{font-size:16px;font-weight:600;margin-bottom:22px}
+footer ul{list-style:none}
+footer li{margin-bottom:16px}
+footer a{text-decoration:none;color:#fff;font-size:15.5px}
+footer a:hover{text-decoration:underline}
+.legal{border-top:1px solid #2a2a2a;padding:26px 0 34px;display:flex;gap:26px;flex-wrap:wrap;font-size:13.5px;color:#a8a8a8}
+.legal a{color:#a8a8a8;font-size:13.5px}
+.legal span{margin-left:auto}
+
+/* ---------- Modal / lightbox / toast ---------- */
+.overlay{position:fixed;inset:0;background:#000000a6;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:28px;max-height:90vh;overflow:auto}
+.modal header{display:flex;gap:14px;align-items:center;margin-bottom:18px}
+.modal h3{font-size:19px}
+.modal .muted{color:var(--muted);font-size:14px}
+.modal ul{margin:14px 0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.8}
+.modal label{font-size:13px;font-weight:600;display:block;margin-bottom:6px}
+.modal input{width:100%;border:1px solid #cfcfcf;border-radius:10px;padding:12px 14px;font:inherit;margin-bottom:18px}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end}
+.lightbox img,.lightbox .lb-inner{max-width:min(1100px,94vw);max-height:84vh;border-radius:12px;background:#fff}
+.lb-inner{width:min(1100px,94vw);aspect-ratio:16/10;overflow:hidden}
+.lb-close{position:absolute;top:18px;right:22px;color:#fff;font-size:34px;line-height:1}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:40px;padding:10px 18px}
+.lb-prev{left:10px}.lb-next{right:10px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,30px);background:var(--ink);color:#fff;padding:13px 20px;border-radius:12px;font-size:14.5px;opacity:0;transition:.25s;z-index:200;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1000px){
+  .nav-right .login,.browse{display:none}
+  .listing,.reviews,.support{grid-template-columns:1fr;gap:30px}
+  aside.side{position:static}
+  .media{grid-template-columns:1fr}
+  .thumbs{flex-direction:row}
+  .thumb{aspect-ratio:16/10}
+  .plans,.similar{grid-template-columns:1fr}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .top .wrap{gap:12px;height:64px}
+  .brand span{display:none}
+  .search{height:42px}
+  .btn-dark.small{padding:10px 14px;font-size:14px}
+  .row{grid-template-columns:1fr;gap:6px}
+  .row .pill{justify-self:start}
+  .watch{font-size:13px;padding:7px 14px;right:12px;bottom:12px}
+  .linkbtn{left:12px;bottom:12px;width:36px;height:36px}
+  .poster .bar b{font-size:13px}
+  .pillars,.poster .bar,.live{display:none}
+  .poster{padding-bottom:40px}
+  .wordmark{margin-top:0;font-size:24px}
+  .headline-chip{font-size:17px;margin-top:6px}
+  .play{width:52px;height:36px;margin:10px 0}
+  .soon{display:none}
+  footer .cols{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= HEADER ======================= -->
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Marketly App Store home">
+      <!-- Fictional marketplace mark -->
+      <svg width="30" height="30" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1a1a1a"/><path d="M9 12h14l-1.3 11.2a2 2 0 0 1-2 1.8h-7.4a2 2 0 0 1-2-1.8z" fill="#fff"/><path d="M12.5 12V10a3.5 3.5 0 0 1 7 0v2" stroke="#fff" stroke-width="1.8" fill="none"/><circle cx="16" cy="18" r="2.2" fill="#36e27a"/></svg>
+      <span>Marketly App Store</span>
+    </a>
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search apps, guides, and more">
+    </label>
+    <div class="nav-right">
+      <div class="browse" id="browse">
+        <button aria-expanded="false">Browse apps
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="menu">
+          <h5>Categories</h5>
+          <a href="#">Sales channels</a><a href="#">Conversion &amp; AI assistants</a>
+          <a href="#">Finding products</a><a href="#">Marketing &amp; retention</a>
+          <a href="#">Selling products</a><a href="#">Customer support</a>
+          <a href="#">Orders and shipping</a><a href="#">Store design</a>
+          <h5>Collections</h5>
+          <a href="#">Staff picks</a><a href="#">Made in India</a>
+          <a href="#">New &amp; noteworthy</a><a href="#">Built for Marketly</a>
+        </div>
+      </div>
+      <a class="login" href="#">Log in</a>
+      <a class="btn-dark small" href="#">Start for free</a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================= LISTING ======================= -->
+<main class="wrap">
+  <div class="listing">
+    <aside class="side">
+      <div class="app-id">
+        <div class="app-icon">
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><path d="M4 10c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M4 16c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M4 22c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/></svg>
+        </div>
+        <h1>Ringg AI Shopping Assistant</h1>
+      </div>
+      <dl class="meta">
+        <dt>Pricing</dt><dd>Free plan available</dd>
+        <dt>Rating</dt><dd>0.0 <span style="color:var(--ink)">★</span> (0 Reviews)</dd>
+        <dt>Developer</dt><dd><a href="#support">Ringg AI</a></dd>
+      </dl>
+      <button class="btn-dark" data-open="install">Install</button>
+      <a class="demo-link" href="#" data-toast="Demo store opens in a new tab once it's live.">View demo store</a>
+    </aside>
+
+    <div class="content">
+      <!-- MEDIA: video + screenshots -->
+      <div class="media">
+        <div class="video" id="video" data-lb="0" role="button" aria-label="Play intro video">
+          <!-- ▼▼ VIDEO PLACEHOLDER — set VIDEO_SRC in the script at the bottom of this file ▼▼ -->
+          <div class="poster" id="poster">
+            <div class="bar">
+              <div class="mini"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M4 10c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M4 16c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M4 22c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/></svg></div>
+              <div style="min-width:0"><b>Introducing the Ringg AI Shopping Assistant | AI Voice Agents for E-commerce</b><small>Ringg AI</small></div>
+            </div>
+            <div class="wordmark">
+              <svg width="42" height="34" viewBox="0 0 32 26" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round"><path d="M2 5c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M2 13c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M2 21c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/></svg>
+              Ringg.AI
+            </div>
+            <div class="live">introducing</div>
+            <div class="headline-chip">AI <span>Shopping Assistant</span></div>
+            <div class="play"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="#fff"/></svg></div>
+            <div class="pillars">Discover <i>|</i> Recommend <i>|</i> Convert</div>
+            <div class="linkbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1"/><path d="M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></svg></div>
+            <div class="watch">Watch video <svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="#fff"/></svg></div>
+          </div>
+        </div>
+        <div class="thumbs" id="thumbs"><!-- filled by script --></div>
+      </div>
+
+      <p class="lead">Help shoppers find the right product and complete their purchase with AI voice and chat. Turn browsers into buyers on autopilot.</p>
+      <p class="desc">Ringg AI Shopping Assistant is an AI agent that talks to your shoppers the way your best store associate would. It answers product questions, compares options, suggests the right size and fit, recommends bundles and add-ons, and sends a personalised checkout link by SMS or WhatsApp when the shopper is ready to buy. It speaks 20+ languages, works across your storefront chat, inbound calls and outbound callbacks, and runs 24/7 without code or a call center. Every conversation includes recordings, transcripts and attributed revenue, so your team can see exactly which conversations drove sales.</p>
+      <ul class="bullets">
+        <li>Guide shoppers to the right product with AI voice and chat conversations</li>
+        <li>Recommend sizes, bundles and add-ons to grow average order value</li>
+        <li>Send personalised product and checkout links by SMS or WhatsApp</li>
+        <li>Call back shoppers for price drops and back-in-stock alerts in 20+ languages</li>
+        <li>Review recordings, transcripts and revenue influenced by every conversation</li>
+      </ul>
+
+      <div class="details">
+        <div class="row"><b>Languages</b><div class="val">English, Hindi, Tamil, Telugu, Kannada, Marathi, Bengali + 13 more</div><span></span></div>
+        <div class="row"><b>Works with</b><div class="val">Marketly Admin, WhatsApp Business, Product catalog, Order management</div><span></span></div>
+        <div class="row">
+          <b>Categories</b>
+          <div class="val">
+            <a href="#">AI shopping assistant</a>
+            <div class="features" id="features">
+              <p>Product discovery</p>
+              <a href="#">Product recommendations</a>, <a href="#">Size &amp; fit guidance</a>, <a href="#">Product comparison</a>, <a href="#">Upsell &amp; cross-sell</a>
+              <p>Customer engagement</p>
+              <a href="#">AI voice calls</a>, <a href="#">Live chat</a>, <a href="#">Multi-channel messaging</a>, <a href="#">Back-in-stock alerts</a>, <a href="#">Multi-language</a>
+              <p>Analytics</p>
+              <a href="#">Conversation transcripts</a>, <a href="#">Revenue attribution</a>, <a href="#">Conversion tracking</a>
+            </div>
+          </div>
+          <button class="pill" id="featBtn" aria-expanded="false">Show features</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ======================= PRICING ======================= -->
+<div class="pricing-bg" id="pricing">
+  <div class="wrap">
+    <h2 style="font-size:24px;font-weight:700;margin-bottom:26px">Pricing</h2>
+    <div class="plans">
+      <div class="plan">
+        <small>Free</small>
+        <div class="price">Free</div>
+        <h4>Features</h4>
+        <ul><li>500 conversation minutes</li><li>3 agents available</li><li>Storefront chat widget</li></ul>
+      </div>
+      <div class="plan pop">
+        <span class="tag">Most popular</span>
+        <small>Growth</small>
+        <div class="price">₹9,134.78 <span>INR / month</span></div>
+        <h4>Features</h4>
+        <ul><li>1,000 minutes / month included</li><li>Access to all agents</li><li>2 personalised numbers</li><li>WhatsApp &amp; SMS product links</li></ul>
+        <div class="extra">₹7.50 per additional minute</div>
+      </div>
+      <div class="plan">
+        <small>Scale</small>
+        <div class="price">₹27,588.88 <span>INR / month</span></div>
+        <h4>Features</h4>
+        <ul><li>3,000 minutes / month included</li><li>Unlock advanced tools</li><li>Access to all agents</li><li>5 personalised numbers</li><li>Custom voice &amp; brand persona</li></ul>
+        <div class="extra">₹6.00 per additional minute</div>
+      </div>
+    </div>
+    <p class="billing">Recurring and usage-based charges are billed every 30 days.</p>
+  </div>
+</div>
+
+<!-- ======================= REVIEWS ======================= -->
+<section class="block wrap" id="reviews">
+  <h2>Reviews</h2>
+  <div class="reviews" style="margin-top:20px">
+    <div class="overall">
+      <h3>Overall rating</h3>
+      <div class="score">0 <span class="stars" id="stars0"></span></div>
+      <div class="dist" id="dist"></div>
+      <div class="r-actions">
+        <button class="ghost" data-open="review">Write a review</button>
+        <button class="ghost" data-toast="No reviews yet. Be the first to leave one.">All reviews</button>
+      </div>
+    </div>
+    <div class="empty"><b>No reviews yet</b>Merchants who install Ringg AI Shopping Assistant can leave a review here.</div>
+  </div>
+</section>
+
+<!-- ======================= SUPPORT ======================= -->
+<section class="block wrap" id="support">
+  <div class="support">
+    <div>
+      <h2>Support</h2>
+      <p class="sub">App support provided by Ringg AI.</p>
+    </div>
+    <div class="details" style="margin-top:0;border-top:0">
+      <div class="row"><b>Resources</b><div class="val"><a href="#">Privacy policy</a> · <a href="#">Setup guide</a> · <a href="#">FAQ</a></div></div>
+      <div class="row"><b>Developer</b><div class="val"><a href="#">Ringg AI</a><div style="color:var(--muted)">Bengaluru, KA, IN</div></div></div>
+      <div class="row"><b>Launched</b><div class="val">December 1, 2026</div></div>
+      <div class="row"><b>Data access</b>
+        <div class="val perm">
+          <p style="color:var(--muted);font-size:14px;margin-bottom:14px">This app needs access to the following data to work in your store. <a href="#">Learn why</a></p>
+          <b>View customer data:</b><span>Name, contact info, browsing and purchase history</span>
+          <b>View staff and contributor data:</b><span>Store owner</span>
+          <b>View store data:</b><span>Products, inventory, orders, discounts, Online Store</span>
+          <a href="#" data-open="install">See details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= MORE APPS ======================= -->
+<section class="block wrap">
+  <h2 style="margin-bottom:26px">More apps like this</h2>
+  <div class="similar">
+    <a class="app-card" href="#">
+      <div class="ico" style="background:#eef5ff"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg></div>
+      <div><h4>Chatwell: AI Product Finder</h4><div class="r">4.6 <span style="color:#1aa260">★</span> (742) • Free to install</div><p>Answer product questions and recommend items with AI chat</p></div>
+    </a>
+    <a class="app-card" href="#">
+      <div class="ico" style="background:#ecfdf3"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></div>
+      <div><h4>Quizzy: Product Quiz &amp; Finder</h4><div class="r">4.9 <span style="color:#1aa260">★</span> (518) • Free plan available</div><p>Guided product quizzes, personalised picks &amp; email capture</p><span class="badge">◆ Built for Marketly</span></div>
+    </a>
+    <a class="app-card" href="#">
+      <div class="ico" style="background:#fff4ec"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div>
+      <div><h4>Callwise Sales Concierge</h4><div class="r">4.7 <span style="color:#1aa260">★</span> (126) • Free trial available</div><p>Live video and voice shopping with your store experts</p></div>
+    </a>
+  </div>
+</section>
+
+<!-- ======================= CTA + FOOTER ======================= -->
+<footer class="cta">
+  <div class="wrap">
+    <h2>Want to add an app?</h2>
+    <div class="center"><a class="btn-green" href="#">Try Marketly free for 3 days</a></div>
+    <div class="cols">
+      <div><svg width="40" height="40" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#fff"/><path d="M9 12h14l-1.3 11.2a2 2 0 0 1-2 1.8h-7.4a2 2 0 0 1-2-1.8z" fill="#000"/><path d="M12.5 12V10a3.5 3.5 0 0 1 7 0v2" stroke="#000" stroke-width="1.8" fill="none"/><circle cx="16" cy="18" r="2.2" fill="#36e27a"/></svg></div>
+      <div><h6>App categories</h6><ul><li><a href="#">Sales channels</a></li><li><a href="#">Finding products</a></li><li><a href="#">Selling products</a></li><li><a href="#">Orders and shipping</a></li><li><a href="#">Store design</a></li></ul></div>
+      <div><h6>Top categories</h6><ul><li><a href="#">AI assistants</a></li><li><a href="#">Marketplaces</a></li><li><a href="#">Product reviews</a></li><li><a href="#">Upsell and bundles</a></li><li><a href="#">Customer support</a></li></ul></div>
+      <div><h6>Resources</h6><ul><li><a href="#">Marketly Help Center</a></li><li><a href="#">API documentation</a></li><li><a href="#">Marketly Community</a></li><li><a href="#">Community Events</a></li><li><a href="#">Partner Program</a></li></ul></div>
+      <div><h6>Marketly</h6><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Investors</a></li><li><a href="#">Press and media</a></li><li><a href="#">Partners</a></li></ul></div>
+    </div>
+    <div class="legal"><a href="#">Terms of service</a><a href="#">Privacy policy</a><a href="#">Developer terms</a><a href="#">Sitemap</a><span>© 2026 Marketly</span></div>
+  </div>
+</footer>
+
+<!-- ======================= OVERLAYS ======================= -->
+<div class="overlay" id="install">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="inst-t">
+    <header>
+      <div class="app-icon" style="width:48px;height:48px"><svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><path d="M4 10c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M4 16c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/><path d="M4 22c3-2.5 5-2.5 8 0s5 2.5 8 0 5-2.5 8 0"/></svg></div>
+      <div><h3 id="inst-t">Install Ringg AI Shopping Assistant</h3><div class="muted">by Ringg AI · Free plan available</div></div>
+    </header>
+    <label for="store">Your store URL</label>
+    <input id="store" placeholder="yourstore.marketly.store">
+    <div class="muted">Ringg AI Shopping Assistant will be able to:</div>
+    <ul>
+      <li>View products, collections and inventory</li>
+      <li>View customer name, contact info and order history</li>
+      <li>Create discount codes and checkout links</li>
+      <li>Add a chat widget to your Online Store</li>
+    </ul>
+    <div class="acts"><button class="ghost" data-close>Cancel</button><button class="btn-dark" id="doInstall" style="padding:11px 20px;font-size:15px">Install app</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="review">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 style="margin-bottom:6px">Write a review</h3>
+    <p class="muted" style="margin-bottom:18px">Only merchants who have installed this app can leave a review.</p>
+    <div class="acts"><button class="ghost" data-close>Close</button><button class="btn-dark" data-close data-open="install" style="padding:11px 20px;font-size:15px">Install app</button></div>
+  </div>
+</div>
+
+<div class="overlay lightbox" id="lb">
+  <button class="lb-close" data-close aria-label="Close">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <div class="lb-inner" id="lbBody"></div>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   VIDEO: once your video is ready, set ONE of these:
+   - a YouTube embed URL, e.g. "https://www.youtube.com/embed/VIDEO_ID"
+   - a local/hosted mp4 path, e.g. "video.mp4" (put the file next to index.html)
+   Leave empty to show the branded poster.
+   ===================================================================== */
+const VIDEO_SRC = "";
+
+/* ---------- Screenshot mockups (SVG, rendered as gallery images) ---------- */
+const grad = `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#fdeee6"/><stop offset="1" stop-color="#f6b08c"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/>`;
+const T = (x,y,s,w,t,c="#1a1a1a",a="start") => `<text x="${x}" y="${y}" font-family="Inter,Arial" font-size="${s}" font-weight="${w}" fill="${c}" text-anchor="${a}">${t}</text>`;
+const shots = [
+`<svg class="shot" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${grad}
+${T(50,90,30,800,"AI shopping assistants")}${T(50,128,30,800,"built for online stores")}
+${T(50,162,15,400,"Your best store associate, available 24/7","#555")}
+${["Product discovery","Size &amp; fit guidance","Back-in-stock callbacks"].map((t,i)=>`<rect x="50" y="${200+i*46}" width="230" height="34" rx="17" fill="#fff" stroke="#eee"/><circle cx="70" cy="${217+i*46}" r="7" fill="#ff6a2b"/>${T(86,222+i*46,14,500,t)}`).join("")}
+<rect x="470" y="40" width="210" height="430" rx="34" fill="#151515"/><rect x="480" y="52" width="190" height="406" rx="26" fill="#fafafa"/>
+<rect x="545" y="62" width="60" height="16" rx="8" fill="#151515"/>
+<circle cx="575" cy="140" r="30" fill="#151515"/><path d="M558 132c5-4 8-4 12 0s8 4 12 0 8-4 12 0M558 142c5-4 8-4 12 0s8 4 12 0 8-4 12 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+${T(575,195,16,700,"Ringg AI","#1a1a1a","middle")}${T(575,215,12,400,"Shopping Assistant · 01:42","#777","middle")}
+<rect x="380" y="250" width="250" height="56" rx="12" fill="#fff" stroke="#eee"/>${T(395,273,12,600,"Shopper")}${T(395,293,12,400,"Which shoe is better for running?","#444")}
+<rect x="430" y="318" width="270" height="56" rx="12" fill="#1a1a1a"/>${T(445,341,12,600,"Ringg AI","#fff")}${T(445,361,12,400,"The AirFlex 2. Size 9 fits best for you.","#ddd")}
+<circle cx="535" cy="420" r="20" fill="#eee"/><circle cx="575" cy="420" r="20" fill="#e5484d"/><circle cx="615" cy="420" r="20" fill="#eee"/>
+<path d="M567 417c5-4 11-4 16 0" stroke="#fff" stroke-width="3" fill="none"/></svg>`,
+
+`<svg class="shot" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${grad}
+${T(400,40,12,500,"AI SHOPPING ASSISTANT","#999","middle")}
+${T(400,78,30,800,"Discover · Recommend · Convert","#1a1a1a","middle")}
+${T(400,108,14,400,"Ringg talks shoppers through every decision, then sends the checkout link.","#555","middle")}
+<rect x="60" y="150" width="210" height="270" rx="14" fill="#fff" stroke="#eee"/>${T(80,180,13,700,"Conversation")}
+${[0,1,2,3].map(i=>`<rect x="${i%2?110:80}" y="${200+i*50}" width="${140}" height="36" rx="10" fill="${i%2?'#1a1a1a':'#f3f3f3'}"/>`).join("")}
+<rect x="300" y="150" width="200" height="300" rx="14" fill="#fff" stroke="#eee"/>${T(320,180,13,700,"Recommended for you")}
+${[0,1,2].map(i=>`<rect x="320" y="${196+i*70}" width="50" height="50" rx="8" fill="${['#ffd9c4','#dbeafe','#dcfce7'][i]}"/><rect x="382" y="${204+i*70}" width="96" height="9" rx="4" fill="#ccc"/><rect x="382" y="${222+i*70}" width="60" height="9" rx="4" fill="#e5e5e5"/>`).join("")}
+<rect x="320" y="404" width="160" height="32" rx="16" fill="#1a1a1a"/>${T(400,425,13,600,"Send checkout link","#fff","middle")}
+<rect x="530" y="150" width="210" height="140" rx="14" fill="#fff" stroke="#eee"/>${T(550,180,13,600,"Conversion lift","#555")}${T(550,240,48,800,"+38%")}${T(550,268,12,400,"vs. browsing-only sessions","#777")}
+<rect x="530" y="306" width="210" height="114" rx="14" fill="#fff" stroke="#eee"/>${T(550,334,13,600,"Avg. order value","#555")}
+<polyline points="550,400 585,388 620,392 655,370 690,360 720,342" fill="none" stroke="#ff6a2b" stroke-width="3"/></svg>`,
+
+`<svg class="shot" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${grad}
+${T(400,40,12,500,"REVENUE ANALYTICS","#999","middle")}
+${T(400,78,30,800,"Higher order values start here.","#1a1a1a","middle")}
+${T(400,108,14,400,"See every conversation, transcript and rupee it influenced.","#555","middle")}
+<rect x="60" y="150" width="300" height="130" rx="14" fill="#fff" stroke="#eee"/>${T(80,180,13,600,"Revenue influenced","#555")}${T(80,232,40,800,"₹18.4L")}${T(80,260,12,500,"▲ 24% this month","#16a34a")}
+<rect x="60" y="296" width="300" height="150" rx="14" fill="#fff" stroke="#eee"/>${T(80,326,13,600,"Top intents","#555")}
+${[["Size &amp; fit",190],["Compare products",140],["Offers &amp; discounts",100]].map(([t,w],i)=>`${T(80,356+i*30,12,400,t,"#444")}<rect x="210" y="${347+i*30}" width="${w-50}" height="10" rx="5" fill="#ff6a2b" opacity="${1-i*.25}"/>`).join("")}
+<rect x="390" y="150" width="350" height="296" rx="14" fill="#fff" stroke="#eee"/>${T(410,180,13,700,"Recent conversations")}
+${[["Priya S.","Ordered · ₹3,499","#16a34a"],["Rahul M.","Link sent","#2563eb"],["Ananya K.","Ordered · ₹6,120","#16a34a"],["Vikram R.","Callback 6 pm","#ea580c"],["Sneha P.","Ordered · ₹1,899","#16a34a"]].map(([n,s,c],i)=>`<line x1="410" x2="720" y1="${198+i*48}" y2="${198+i*48}" stroke="#f0f0f0"/><circle cx="428" cy="${222+i*48}" r="12" fill="#f1f1f1"/>${T(450,227+i*48,13,600,n)}${T(720,227+i*48,12,500,s,c,"end")}`).join("")}
+</svg>`
+];
+
+const thumbs = document.getElementById('thumbs');
+shots.forEach((s,i)=>{ const b=document.createElement('button'); b.className='thumb'; b.dataset.lb=i+1; b.setAttribute('aria-label','Open screenshot '+(i+1)); b.innerHTML=s; thumbs.appendChild(b); });
+
+/* ---------- Video ---------- */
+const video = document.getElementById('video');
+function videoMarkup(autoplay){
+  if(!VIDEO_SRC) return null;
+  if(/youtube|vimeo/.test(VIDEO_SRC)) return `<iframe src="${VIDEO_SRC}${autoplay?(VIDEO_SRC.includes('?')?'&':'?')+'autoplay=1':''}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  return `<video src="${VIDEO_SRC}" controls ${autoplay?'autoplay':''} playsinline></video>`;
+}
+video.addEventListener('click',()=>{
+  const m = videoMarkup(true);
+  if(m){ video.innerHTML=m; video.style.cursor='default'; video.removeAttribute('data-lb'); }
+  else toast('Product video coming soon.');
+}, {once:false});
+if(!VIDEO_SRC){ const s=document.createElement('div'); s.className='soon'; s.textContent='Video coming soon'; document.getElementById('poster').appendChild(s); }
+
+/* ---------- Lightbox ---------- */
+const lb=document.getElementById('lb'), lbBody=document.getElementById('lbBody'); let cur=0;
+function showLb(i){ cur=(i+shots.length)%shots.length; lbBody.innerHTML=shots[cur]; lb.classList.add('open'); }
+thumbs.addEventListener('click',e=>{ const t=e.target.closest('.thumb'); if(t) showLb(+t.dataset.lb-1); });
+document.getElementById('lbPrev').onclick=()=>showLb(cur-1);
+document.getElementById('lbNext').onclick=()=>showLb(cur+1);
+
+/* ---------- Overlays ---------- */
+function open(id){ document.getElementById(id).classList.add('open'); }
+function closeAll(){ document.querySelectorAll('.overlay.open').forEach(o=>o.classList.remove('open')); }
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-close]'); if(c){ closeAll(); }
+  const o=e.target.closest('[data-open]'); if(o){ e.preventDefault(); open(o.dataset.open); }
+  const t=e.target.closest('[data-toast]'); if(t){ e.preventDefault(); toast(t.dataset.toast); }
+  if(e.target.classList.contains('overlay')) closeAll();
+  if(!e.target.closest('#browse')) document.getElementById('browse').classList.remove('open');
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeAll();
+  if(lb.classList.contains('open')){ if(e.key==='ArrowRight') showLb(cur+1); if(e.key==='ArrowLeft') showLb(cur-1); }
+});
+document.getElementById('doInstall').onclick=()=>{ closeAll(); toast('Ringg AI Shopping Assistant installed. Setting up your first agent…'); };
+
+/* ---------- Browse menu, features, search ---------- */
+const browse=document.getElementById('browse');
+browse.querySelector('button').onclick=()=>{ const o=browse.classList.toggle('open'); browse.querySelector('button').setAttribute('aria-expanded',o); };
+const featBtn=document.getElementById('featBtn'), feats=document.getElementById('features');
+featBtn.onclick=()=>{ const s=feats.classList.toggle('show'); featBtn.textContent=s?'Hide features':'Show features'; featBtn.setAttribute('aria-expanded',s); };
+document.getElementById('q').addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.value.trim()) toast(`Searching for “${e.target.value.trim()}”…`); });
+
+/* ---------- Reviews ---------- */
+const star=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>`;
+document.getElementById('stars0').innerHTML=star.repeat(5);
+document.getElementById('dist').innerHTML=[5,4,3,2,1].map(n=>`<div><span>${n} ★</span><span class="track"></span><span>0</span></div>`).join('');
+
+/* ---------- Toast ---------- */
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2600); }
+</script>
+</body>
+</html>
